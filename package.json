@@ -1,0 +1,34 @@
+{
+  "name": "@origamicore/core",
+  "version": "4.0.0",
+  "description": "OrigamiCore is a powerful Node.js framework that allows you to develop your project maintainable, fast and easily",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "publish": "npm publish",
+    "run-sample": "node ./dist/sample/sample.js",
+    "build and run ": "npx tsc & node ./dist/sample/sample.js"
+  },
+  "keywords": [
+    "typescript",
+    "origamicore",
+    "framework"
+  ],
+  "author": "Vahid Hossaini",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/origamicore/core"
+  },
+  "homepage": "https://origamicore.com",
+  "dependencies": {
+    "@types/node": "^17.0.31",
+    "reflect-metadata": "^0.1.13"
+  },
+  "bugs": {
+    "url": "https://github.com/origamicore/core/issues"
+  }
+}
