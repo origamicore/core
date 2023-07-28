@@ -1,4 +1,4 @@
-import {MessageModel,Router} from "../../../"; 
+import {MessageModel,RouteResponse,Router} from "../../../"; 
 
 export default class SampleRoute
 {
@@ -16,5 +16,9 @@ export default class SampleRoute
            info:{fname:firstName,lname:lastName,other:{sex:'test'}},
            addedData
         }}))
+    }
+    static async RunEventService(event:(data:RouteResponse)=>void)
+    {
+       return await Router.runInternal(this.domain,'eventService',new MessageModel({}),event)
     }
 }

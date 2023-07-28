@@ -28,6 +28,12 @@ export  function OdataInput (target: Object, propertyKey: string , parameterInde
         type:'odata'
     })) 
 }
+export  function EventInput (target: Object, propertyKey: string , parameterIndex: number) { 
+    container.addParamData(propertyKey,new ParamModel({
+        index:parameterIndex,
+        type:'event'
+    })) 
+}
 export  function SessionInput (target: Object, propertyKey: string , parameterIndex: number) { 
     container.addParamData(propertyKey,new ParamModel({
         index:parameterIndex,
@@ -58,6 +64,7 @@ export function DataInput(fields?: {
     }
 
 }
+ 
 export function OriService(fields?: {
    // domain?: string,
     route?:string;
@@ -66,7 +73,8 @@ export function OriService(fields?: {
     isPublic?:boolean,
     roles?: number[] 
     maxUploadSize?:number
-    method?:HttpMethod
+    method?:HttpMethod,
+    isEvent?:boolean
   }) { 
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {  
  
@@ -146,6 +154,7 @@ export default function OriInjectable(fields: {
  
                 if(pmodel.type=='session')paramList[pmodel.index].isSession=true;
                 if(pmodel.type=='odata')paramList[pmodel.index].isOdata=true;
+                if(pmodel.type=='event')paramList[pmodel.index].isEvent=true;
                 if(pmodel.classType)paramList[pmodel.index].type= pmodel.classType ; 
                 if(pmodel.basicType)paramList[pmodel.index].basicType= pmodel.basicType ; 
                 if(pmodel.isArray)paramList[pmodel.index].isArray= pmodel.isArray ; 
@@ -155,6 +164,7 @@ export default function OriInjectable(fields: {
                 var service=func.name;
                 if(func.option.service)service=func.option.service;
                 Router.addInternalRoute(fields.domain,service,new InternalService({
+                    isEvent:func.option.isEvent,
                     functionName:func.name,
                     args:paramList
                 }) )
@@ -166,6 +176,7 @@ export default function OriInjectable(fields: {
                 Router.addExternalRoute(fields.domain,service,new ExtrnalService({
                     functionName:func.name,
                     isPublic:func.option.isPublic,
+                    isEvent:func.option.isEvent,
                     maxUploadSize:func.option.maxUploadSize,
                     roles:func.option.roles, 
                     args:paramList,

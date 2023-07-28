@@ -3,7 +3,7 @@ import ModelService, { ObjectModel } from "./modelService";
 
 export class ParamModel{
     index:number;
-    type:'session'|'input'|'odata';
+    type:'session'|'input'|'odata'|'event';
     isRequired:boolean;
     classType:any=null;
     basicType:any=null;
@@ -11,7 +11,7 @@ export class ParamModel{
     public constructor(
         fields?: { 
           index?: number
-          type?:'session'|'input'|'odata'
+          type?:'session'|'input'|'odata'|'event'
           isRequired?: boolean
           classType?:any
           basicType?:any
@@ -28,6 +28,7 @@ export class FunctionOption
     service:string='';
     isInternal:boolean;
     isPublic:boolean;
+    isEvent:boolean;
     roles: number[] ;
     maxUploadSize:number;
     method:HttpMethod
@@ -35,6 +36,7 @@ export class FunctionOption
         service?: string
         isInternal?:boolean
         isPublic:boolean
+        isEvent:boolean
         method:HttpMethod
         roles?: number[] 
         maxUploadSize?:number

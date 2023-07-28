@@ -18,6 +18,7 @@ export default class ExtrnalService
     functionName:string;
     function:Function ; 
     isPublic:boolean=true; 
+    isEvent:boolean=false; 
     roles:number[]=[]; 
     args:ArgModel[]=[];
     maxUploadSize:number=0;
@@ -27,6 +28,7 @@ export default class ExtrnalService
             functionName?: string
             function?: DefaultFunction
             isPublic?: boolean
+            isEvent?: boolean
             roles?: number[]  
             args?: ArgModel[]  
             maxUploadSize?:number

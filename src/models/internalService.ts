@@ -7,12 +7,14 @@ export default class InternalService
     functionName:string;
     function:Function ;   
     args:ArgModel[]=[];
+    isEvent:boolean;
     public constructor(
         fields?: { 
             functionName?: string
             function?:  Function             
             args?:ArgModel[]
             parent?:any
+            isEvent?:boolean;
         }) {
         if (fields) Object.assign(this, fields);
     }

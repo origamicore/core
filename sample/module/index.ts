@@ -1,5 +1,5 @@
  
-import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig} from "../../"; 
+import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig, EventInput} from "../../"; 
 import TestModel from "./models/testModel"; 
 
 @OriInjectable({domain:'test'})
@@ -11,6 +11,7 @@ class SampleIndex implements PackageIndex
     }
     start(): Promise<void> {
         SampleIndex.prototype['internalService1']= SampleIndex1.prototype.internalService1;
+        SampleIndex.prototype['eventService']= SampleIndex1.prototype.eventService;
         return;
     }
     restart(): Promise<void> {
@@ -51,6 +52,15 @@ class SampleIndex1
     {
         console.log('internalService1 >',this.name );
 
+    }
+    @OriService({isInternal:true,isEvent:true})
+    async eventService(@EventInput event:(param:number)=>void)
+    {
+        let counter:number=0;
+        setInterval(()=>{
+            counter++;
+            event(counter)
+        },1000)
     }
 }
 export {SampleIndex1}

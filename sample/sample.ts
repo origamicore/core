@@ -26,7 +26,8 @@ export default class SampleProject
         ];
         console.log('>>',JSON.parse(JSON.stringify(list)) );
         
-        var data=await SampleRoute.RunTestService('vahid1xx','hoss',[{xx:'dd'},{xx:'dd'}]);
+        var data:any={}
+        data=await SampleRoute.RunTestService('vahid1xx','hoss',[{xx:'dd'},{xx:'dd'}]);
         console.log(data);
         
         data=await SampleRoute.RunTestService('','hoss','dd');
@@ -34,7 +35,10 @@ export default class SampleProject
 
         data=await SampleRoute.RunTestService1('vahid1xx','hoss','dd');
         console.log(data);
-        
+        data=await SampleRoute.RunEventService((eventData)=>{
+            console.log(eventData);
+        })
+        console.log(data);
 
     }
 }

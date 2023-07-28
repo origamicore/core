@@ -63,7 +63,7 @@ export default class Router
     }
 
   }
-  static async runInternal(domain:string ,service:string ,message:MessageModel ):Promise<RouteResponse>
+  static async runInternal(domain:string ,service:string ,message:MessageModel,event?:(RouteResponse)=>void ):Promise<RouteResponse>
   { 
     
     if(domain==null || !routes[domain])
@@ -80,10 +80,25 @@ export default class Router
     var data:any[]=[];
     for(var arg of s.args)
     { 
-      var dt=message.data[arg.name]; 
+      var dt:any=null; 
+      if(message.data)
+      {
+        dt=message.data[arg.name]
+      }
       if(arg.isSession)
       {
         dt=message.session;
+      }
+      if(arg.isEvent)
+      {
+        dt=(res:any)=>{
+            if(res instanceof RouteResponse)
+            {
+              return event(res) ;
+            }
+            return event(RouteResponse.success(res)); 
+        }
+         
       }
       if(arg.type || arg.basicType)
       {
@@ -129,7 +144,7 @@ export default class Router
       return RouteResponse.failed(exp,exp.message,'')
     }
   }
-  static async runExternal(domain:string ,service:string ,message:MessageModel,route:string,httpMethod:string  ):Promise<RouteResponse>
+  static async runExternal(domain:string ,service:string ,message:MessageModel,route:string,httpMethod:string ,event?:(RouteResponse)=>void ):Promise<RouteResponse>
   { 
     
     if(domain==null || !routes[domain])
@@ -159,7 +174,11 @@ export default class Router
     for(var arg of s.args)
     {
       
-      var dt=message.data[arg.name]; 
+      var dt:any=null; 
+      if(message.data)
+      {
+        dt=message.data[arg.name]
+      }
       if(arg.isSession)
       {
         dt=message.session;
@@ -167,6 +186,16 @@ export default class Router
       if(arg.isOdata)
       {
         dt=new OdataModel(message.data) ;
+      }
+      if(arg.isEvent)
+      {
+        dt=(res:any)=>{
+            if(res instanceof RouteResponse)
+            {
+              return event(res) ;
+            }
+            return event(RouteResponse.success(res)); 
+        }
       }
       if(arg.type || arg.basicType)
       { 
