@@ -79,13 +79,10 @@ export function OriService(fields?: {
         const paramTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey)
         if(paramTypes)
         {
-            var s = paramTypes.map(a => a) ;  
-            let functionParameters= getParamNames(target[propertyKey] );
-            for(let index=0;index< functionParameters.length;index++)
-            {
-                let name=functionParameters[index]
-                let paramTypeName=s[index].name;
-                
+            var s = paramTypes.map(a => a) ;    
+            for(let index=0;index< s.length;index++)
+            { 
+                let paramTypeName=s[index].name;  
                 let basicType:any;
                 let manualType:any; 
                 if(paramTypeName=='Array'||paramTypeName=='Object')
@@ -219,11 +216,7 @@ export function OriProps(fields?: {
         if(!t)console.log('type warning');
         
         if(!fields)fields={};
-        fields.type=t?.name;
-        if(propertyKey.indexOf('$ori')==0)
-        {
-            throw 'you can\'t use $ori ';
-        } 
+        fields.type=t?.name; 
         ModelContainer.addProp(new ModelProps(propertyKey,fields));
          
         if(fields?.readOnly)
