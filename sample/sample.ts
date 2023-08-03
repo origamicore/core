@@ -9,13 +9,14 @@ export default class SampleProject
     constructor()
     {
         this.init();
-    }
+    } 
     async init()
     {
-        var model=new Model2({gender:'male'}); 
-        console.log('>>model',model.$oriExtraData.isValid()); 
+        var model=new Model2({_id:'21',gender:'male',firstName:'vahid',lastName:'hossaini'}); 
+        console.log('>>model',model.isValid()); 
         console.log('>>model',model.toJSON());
-        model.$oriExtraData.clearByTag('readonly');
+        console.log('>>model',model.fullName);
+        model.clearByTag('readonly');
         console.log('>>model',model.toJSON());
         
         var origamicore = new OrigamiCore(config);
@@ -29,9 +30,12 @@ export default class SampleProject
         var data:any={}
         data=await SampleRoute.RunTestService('vahid1xx','hoss',[{xx:'dd'},{xx:'dd'}]);
         console.log(data);
-        
-        data=await SampleRoute.RunTestService('','hoss','dd');
-        console.log(data);
+        try{
+            data=await SampleRoute.RunTestService('','hoss','dd');
+
+        }catch(exp){
+            console.log('Exception : '+exp); 
+        }
 
         data=await SampleRoute.RunTestService1('vahid1xx','hoss','dd');
         console.log(data);

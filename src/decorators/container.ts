@@ -84,7 +84,7 @@ export default class Container{
 export class ModelProps
 {
     name:string
-    readOnly:string
+    readOnly : (p:any)=>any
     title:string
     tags:string[]|string
     minLength: number   
@@ -93,7 +93,7 @@ export class ModelProps
     isRequired:boolean 
     type:string;
     constructor(name:string,fields?: { 
-        readOnly?:string
+        readOnly?: (p:any)=>any
         title?:string
         tags?:string[]|string
         minLength?: number   
@@ -116,7 +116,7 @@ export class ModelContainer
     }
     static addModel(className:string)
     {
-        ModelService.models[className]=new ObjectModel({name:className,props:this.props}); 
+        ModelService.models.set(className,new ObjectModel({name:className,props:this.props}));  
         this.props=[]
     }
 }

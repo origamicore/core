@@ -119,7 +119,7 @@ export default class Router
           else dt=(arg.basicType)(dt); 
           if(dt instanceof IOriModel)
           { 
-            var validate=  dt.$oriExtraData.isValid();  
+            var validate=  dt.isValid();  
             if(validate!==true)
             {
               return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
@@ -214,7 +214,7 @@ export default class Router
           else dt=(arg.basicType)(dt); 
           if(dt instanceof IOriModel)
           { 
-            var validate=  dt.$oriExtraData.isValid();
+            var validate=  dt.isValid();
             if(validate!==true)
             {
               return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)

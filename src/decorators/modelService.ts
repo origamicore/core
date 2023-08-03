@@ -17,12 +17,17 @@ export default class ModelService
     static models:Map<string,ObjectModel>=new Map<string,ObjectModel>();
     static  getModel(name:string):ObjectModel
     {
-        return this.models[name] as ObjectModel
+        return this.models.get(name)  as ObjectModel
+    }
+    static getByTag(name:string,tag:string):string[]
+    {
+        var model=this.models.get(name) as ObjectModel ; 
+        return model.props.filter(p=>(Array.isArray(p.tags))?p.tags.indexOf(tag)>-1 : p.tags==tag).map(p=>p.name);
     }
     static validateObject(name:string,value:any):string[]|true
     {
         var error:any[]=[]; 
-        var model=this.models[name] as ObjectModel ;  
+        var model=this.models.get(name) as ObjectModel ;  
         
         if(!model)return [];
         for(var prop of model.props)

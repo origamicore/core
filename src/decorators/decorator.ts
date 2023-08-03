@@ -3,9 +3,7 @@ import ExtrnalService, { HttpMethod } from "../models/extrnalService";
 import InternalService from "../models/internalService";
 import Router from "../router/router";
 import Container, { FunctionModel, FunctionOption, ModelContainer, ModelProps, ParamModel } from "./container"; 
-import ModelService from "./modelService";
-import ExtraData from "./validation/extraData";
-import IOriModel from "./validation/iOriModel";
+import ModelService from "./modelService"; 
 import 'reflect-metadata'
 
 
@@ -201,7 +199,7 @@ export function OriModel(fields?: {
  
 
 export function OriProps(fields?: { 
-    readOnly?:string
+    readOnly?: (p:any)=>any
     title?:string
     tags?:string[]|string
     minLength?: number  
@@ -227,52 +225,25 @@ export function OriProps(fields?: {
             throw 'you can\'t use $ori ';
         } 
         ModelContainer.addProp(new ModelProps(propertyKey,fields));
-        
-        if(fields?.tags)
-        {
-
-            if(!target['$oriExtraData'])
-            {
-                target['$oriExtraData']=new ExtraData()
-            }
-            if(Array.isArray(fields.tags))
-            {
-                for(var tag of fields.tags)
-                {
-                    target['$oriExtraData'].addTag(tag,propertyKey) 
-                    
-                }
-            }
-            else
-            {
-                target['$oriExtraData'].addTag(fields.tags,propertyKey) 
-            }
-        } 
+         
         if(fields?.readOnly)
         {
             Object.defineProperty(target, propertyKey, {
                 get: function() {
-                    return  this.$oriValues[fields.readOnly];
+                    return  fields?.readOnly(this);
                 } 
             }); 
             return
         }
         const getter = function() {
-            return  this.$oriValues[propertyKey];
+            return  this['@'+propertyKey];
         };
         const setter = function(newVal: any) {  
-            var errors = ModelService.validate(this.constructor.name,propertyKey,newVal);
-            var model=this as IOriModel; 
-            for(var error of errors)
-            {
-                model.$oriExtraData.SetValiadte(propertyKey,error);
-            }
-            
-            if(!errors.length)
-            {
-                model.$oriExtraData.SetValiadte(propertyKey,'') 
-                this.$oriValues[propertyKey] = newVal; 
-            } 
+            var errors = ModelService.validate(this.constructor.name,propertyKey,newVal); 
+            if(errors?.length)
+                throw errors.map(p=>'['+p.title+' '+p.type+']').join(' ')
+            this['@'+propertyKey] = newVal;   
+
         }; 
         Object.defineProperty(target, propertyKey, {
             get: getter,

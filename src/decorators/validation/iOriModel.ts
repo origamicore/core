@@ -1,24 +1,46 @@
-import ModelService from "../modelService";
-import ErrorDataModel from "./errorDataModel";
-import ExtraData from "./extraData";
+import ModelService from "../modelService"; 
 
 export default class IOriModel
-{
-    $oriExtraData:ExtraData;
-    $oriValues:any={}; 
-    $oriJSonProps:any={};
-    constructor()
-    {  
-        if(!this.$oriExtraData)this.$oriExtraData=new ExtraData();
-        if(this.$oriExtraData)this.$oriExtraData.setParent(this);          
+{   
+    public isValid():string[]|true
+    {
+        return ModelService.validateObject(this.constructor.name,this)
+    }
+    
+    clearByTag(tag:string)
+    {
+        let tags=ModelService.getByTag(this.constructor.name,tag) 
+        if(tags)
+        {
+            for(var tag of tags)
+            {
+                if(this[tag])
+                {
+                    this[tag]=null;
+                }
+            }
+        }
+    }
+    removeByTag(tag:string)
+    {
+        let tags=ModelService.getByTag(this.constructor.name,tag) 
+        if(tags)
+        {
+            for(var tag of tags)
+            {
+                if(this[tag])
+                {
+                    delete this[tag];
+                }
+            }
+        }
     }
     toJSON()
-    {
-        var ignore=['$oriJSonProps','$oriValues','$oriExtraData']
+    { 
         var copy:any={};
         for(let prop in this)
-        {
-            if(ignore.indexOf(prop)!=-1)continue;
+        { 
+            if(prop[0]=='@')continue;
             copy[prop]=this[prop]
         }         
         var model=ModelService.getModel(this.constructor.name)
@@ -26,7 +48,7 @@ export default class IOriModel
         {
             if(!prop.ignoreToJson)
             {
-                copy[prop.name]=this[prop.name];
+                copy[prop.name]=this['@'+prop.name];
             }
         } 
         return  copy;
