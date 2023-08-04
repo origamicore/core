@@ -1,8 +1,9 @@
+import ErrorModel from "../../models/errorModel";
 import ModelService from "../modelService"; 
 
 export default class IOriModel
 {   
-    public isValid():string[]|true
+    public isValid():string|true
     {
         return ModelService.validateObject(this.constructor.name,this)
     }

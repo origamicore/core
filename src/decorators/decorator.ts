@@ -153,6 +153,7 @@ export default function OriInjectable(fields: {
                 if(pmodel.classType)paramList[pmodel.index].type= pmodel.classType ; 
                 if(pmodel.basicType)paramList[pmodel.index].basicType= pmodel.basicType ; 
                 if(pmodel.isArray)paramList[pmodel.index].isArray= pmodel.isArray ; 
+                if(pmodel.isRequired)paramList[pmodel.index].isRequired= pmodel.isRequired ; 
             }) 
             if(func.option.isInternal)
             {
@@ -217,6 +218,7 @@ export function OriProps(fields?: {
         
         if(!fields)fields={};
         fields.type=t?.name; 
+        let className=target.constructor.name;
         ModelContainer.addProp(new ModelProps(propertyKey,fields));
          
         if(fields?.readOnly)
@@ -234,7 +236,11 @@ export function OriProps(fields?: {
         const setter = function(newVal: any) {  
             var errors = ModelService.validate(this.constructor.name,propertyKey,newVal); 
             if(errors?.length)
-                throw errors.map(p=>'['+p.title+' '+p.type+']').join(' ')
+            {
+                let x= ModelService.getModel(className)
+                throw errors
+
+            }
             this['@'+propertyKey] = newVal;   
 
         }; 

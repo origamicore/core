@@ -21,6 +21,13 @@ class SampleIndex implements PackageIndex
         return;
     }
 
+    @OriService()
+    async testService( info:TestModel,@SessionInput session,valid:boolean)
+    {
+        console.log('info>',info);
+        console.log('session>',session);
+        
+    }
     @OriService({isInternal:true,})
     async internalService( info:TestModel,@DataInput({basicType:String,isArray:true}) addedData?:string[])
     {
@@ -30,13 +37,6 @@ class SampleIndex implements PackageIndex
         console.log('errors>',info.isValid());
         console.log('addedData>',addedData);
 
-    }
-    @OriService()
-    async testService(@DataInput({classType:TestModel}) info,@SessionInput session)
-    {
-        console.log('info>',info);
-        console.log('session>',session);
-        
     }
  
 }

@@ -1,4 +1,5 @@
 import { IOriModel } from "../..";
+import ModelService from "../decorators/modelService";
 import ExtrnalService, { HttpMethod } from "../models/extrnalService";
 import GlobalModels from "../models/globalModels";
 import InternalService from "../models/internalService";
@@ -99,35 +100,41 @@ export default class Router
             return event(RouteResponse.success(res)); 
         }
          
+      }   
+      if(arg.isRequired && !dt)
+      { 
+        return RouteResponse.failed(null,arg.name+' required','')
       }
-      if(arg.type || arg.basicType)
+      if(dt || arg.isRequired)
       {
-        if(arg.isArray)
+        if(arg.type || arg.basicType)
         {
-          console.log(arg);
-          if(!Array.isArray(dt))return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
-          let arr= []
-          if(arg.type) arr=dt.map(a=>new (arg.type)(a)) ; 
-          else arr=dt.map(a=>  (arg.basicType)(a));
-          
-          dt=arr;
-        }
-        else
-        {
-          
-          if(arg.type) dt=new (arg.type)(dt); 
-          else dt=(arg.basicType)(dt); 
-          if(dt instanceof IOriModel)
-          { 
-            var validate=  dt.isValid();  
-            if(validate!==true)
-            {
-              return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
-            }
+          if(arg.isArray)
+          {
+            if(!Array.isArray(dt))return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
+            let arr= []
+            if(arg.type) arr=dt.map(a=>new (arg.type)(a)) ; 
+            else arr=dt.map(a=>  (arg.basicType)(a));
             
+            dt=arr;
           }
+          else
+          {
+            
+            if(arg.type) dt=new (arg.type)(dt); 
+            else dt=(arg.basicType)(dt); 
+            if(dt instanceof IOriModel)
+            { 
+              var validate=  dt.isValid();  
+              if(validate!==true)
+              {
+                return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
+              }
+              
+            }
+          }
+          
         }
-        
       }
       data.push(dt);
 
@@ -197,29 +204,40 @@ export default class Router
             return event(RouteResponse.success(res)); 
         }
       }
-      if(arg.type || arg.basicType)
+      if(arg.isRequired && !dt)
       { 
-        if(arg.isArray)
-        {
-          if(!Array.isArray(dt))return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
-          let arr= []
-          if(arg.type) arr=dt.map(a=>new (arg.type)(a)) ; 
-          else arr=dt.map(a=>  (arg.basicType)(a));
-          
-          dt=arr;
-        }
-        else
-        {
-          if(arg.type) dt=new (arg.type)(dt); 
-          else dt=(arg.basicType)(dt); 
-          if(dt instanceof IOriModel)
-          { 
-            var validate=  dt.isValid();
-            if(validate!==true)
-            {
+        return RouteResponse.failed(null,'['+arg.name+', required],','')
+      }
+      if(dt || arg.isRequired)
+      {
+        if(arg.type || arg.basicType)
+        { 
+          if(arg.isArray)
+          {
+            if(!Array.isArray(dt))
+            { 
               return RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
             }
+            let arr= []
+            if(arg.type) arr=dt.map(a=>new (arg.type)(a)) ; 
+            else arr=dt.map(a=>  (arg.basicType)(a));
             
+            dt=arr;
+          }
+          else
+          {
+            if(arg.type) dt=new (arg.type)(dt); 
+            else dt=(arg.basicType)(dt); 
+            if(dt instanceof IOriModel)
+            { 
+              var validate=  dt.isValid();
+              if(validate!==true)
+              {
+                throw validate
+                // return  RouteResponse.failed({error:validate,name:arg.name},'parameter validation',RouteErrorMessage.validationError)
+              }
+              
+            }
           }
         }
       }

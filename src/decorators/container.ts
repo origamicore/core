@@ -57,7 +57,18 @@ export class FunctionModel{
 
     addParamData( param:ParamModel)
     { 
-        if(!this.params.has(param.index)  )this.params.set(param.index,param)   ;
+        if(!this.params.has(param.index)  )
+        {
+            this.params.set(param.index,param)   ;
+        }
+        else
+        {
+            let tmp=this.params.get(param.index);
+            tmp.basicType??=param.basicType ;
+            tmp.classType??=param.classType ;
+            tmp.isArray??=param.isArray ;
+            tmp.isRequired??=param.isRequired ;
+        }
     }
     setOption( option:FunctionOption)
     {
