@@ -1,6 +1,6 @@
 {
   "name": "@origamicore/core",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "OrigamiCore is a powerful Node.js framework that allows you to develop your project maintainable, fast and easily",
   "main": "dist/index.js",
   "scripts": {
