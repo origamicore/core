@@ -1,4 +1,4 @@
-import OrigamiCore from "../";
+import OrigamiCore, { Router } from "../";
 import config from "./config";
 import SampleIndex from "./module";
 import Model2 from "./module/models/model2";
@@ -43,6 +43,15 @@ export default class SampleProject
             console.log(eventData);
         })
         console.log(data);
+        for(let domain of Router.getDomains())
+        {
+            let services=Router.getExternalServices(domain);
+            for(let service of services)
+            {
+                let serviceData=  Router.getRouteData(domain,service)
+                console.log('serviceData>>>',serviceData);
+            } 
+        } 
 
     }
 }

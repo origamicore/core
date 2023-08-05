@@ -28,55 +28,62 @@ var routes = globalModel.routes;
 export default class Router
 { 
   //static routes = new Map<String,RouteService>();  
+  static getDomains()
+  {
+    return Array.from(routes.keys() ).map(p=>p+'')
+  }
+  static getExternalServices(domain:string)
+  {
+    return Array.from(routes.get(domain).externalServices.keys() ) .map(p=>p+'')
+
+  }
   static getRouteData(domain:string , service:string): ExtrnalService
   {
-    if(!routes[domain])return null;
-    var route=(routes[domain] as RouteService);
-    if(!route.externalServices[service])return null;
-    return route.externalServices[service] as ExtrnalService;
+    if(!routes.get(domain))return null;
+    var route= routes.get(domain) ;
+    if(!route.externalServices.get(service) )return null;
+    return route.externalServices.get(service);
   } 
   static addExternalRoute(domain:string , service:string , data:ExtrnalService)
   {
-    if(!routes[domain])routes[domain]=new RouteService();
-    routes[domain].externalServices[service]=data; 
+    if(!routes.get(domain))routes.set(domain,new RouteService());
+    routes.get(domain).externalServices.set(service,data)  ; 
   }
   static addInternalRoute(domain:string , service:string , data:InternalService)
   {
-    if(!routes[domain])routes[domain]=new RouteService();
-    routes[domain].services[service]=data;
+    if(!routes.get(domain))routes.set(domain,new RouteService());
+    routes.get(domain).services.set(service,data) ;
   }
   static setInstance(index:PackageIndex)
   {
     var domain=index.name;
-    if(!routes[domain])return null;
-    var service=routes[domain] as RouteService
-    for(var defsrv in service.services)
-    { 
-      let serviceOption=service.services[defsrv] as InternalService;
-      serviceOption.function=index[serviceOption.functionName]
-      serviceOption.parent=index;
-    }
-    for(var srv in service.externalServices)
-    {  
-      let serviceOption=service.externalServices[srv] as ExtrnalService;
-      serviceOption.function=index[serviceOption.functionName];
-      serviceOption.parent=index;
-    }
+    if(!routes.get(domain))return null;
+    var service=routes.get(domain) 
+    service.services.forEach( (value: InternalService) => {
+       
+      value.function=index[value.functionName]
+      value.parent=index;
+    }) 
+    service.externalServices.forEach((value: ExtrnalService) =>{
+       
+      value.function=index[value.functionName];
+      value.parent=index;
+    }) 
 
   }
   static async runInternal(domain:string ,service:string ,message:MessageModel,event?:(RouteResponse)=>void ):Promise<RouteResponse>
   { 
     
-    if(domain==null || !routes[domain])
+    if(domain==null || !routes.get(domain))
     {
       return new RouteResponse({error: RouteErrorMessage.domainNotExist});
     }  
-    if( !routes[domain]?.services[service])
+    if( !routes.get(domain)?.services.get(service))
     {
       return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     }
-    var d=routes[domain] as RouteService;
-    var s= d?.services[service] as InternalService;
+    var d=routes.get(domain);
+    var s= d?.services.get(service) ;
     if(s==null) return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     var data:any[]=[];
     for(var arg of s.args)
@@ -154,16 +161,16 @@ export default class Router
   static async runExternal(domain:string ,service:string ,message:MessageModel,route:string,httpMethod:string ,event?:(RouteResponse)=>void ):Promise<RouteResponse>
   { 
     
-    if(domain==null || !routes[domain])
+    if(domain==null || !routes.get(domain))
     {
       return new RouteResponse({error: RouteErrorMessage.domainNotExist});
     }  
-    if( !routes[domain]?.externalServices[service])
+    if( !routes.get(domain)?.externalServices.get(service))
     {
       return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     }
-    var d=routes[domain] as RouteService;
-    var s= d?.externalServices[service] as ExtrnalService;
+    var d=routes.get(domain);
+    var s= d?.externalServices.get(service);
 
     var routeData=s.validateRoute(route);
     if(!routeData) return new RouteResponse({error: RouteErrorMessage.serviceNotExist}); 
