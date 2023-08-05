@@ -126,10 +126,16 @@ export default class Router
             dt=arr;
           }
           else
-          {
-            
-            if(arg.type) dt=new (arg.type)(dt); 
-            else dt=(arg.basicType)(dt); 
+          { 
+              if(arg.type ) 
+              {
+                if(arg.type.name!='Function')
+                {
+                  dt=new (arg.type)(dt); 
+                }
+
+              }
+              else dt=(arg.basicType)(dt); 
             if(dt instanceof IOriModel)
             { 
               var validate=  dt.isValid();  
