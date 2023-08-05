@@ -66,16 +66,19 @@ export default class ModelService
     }
     static vaidateProp(field:ModelProps,newVal:any,propertyKey:string):string
     {
-        let text=''
-        var error:ErrorModel[]=[]; 
-        if(field?.minLength!=null && (newVal??'').toString().length < field?.minLength) {
-            var title=field?.title??propertyKey; 
-            text+='['+title+' minLength],' 
+        let text='' 
+        if(field?.isRequired || newVal)
+        {
+
+            if(field?.minLength!=null && (newVal??'').toString().length < field?.minLength) {
+                var title=field?.title??propertyKey; 
+                text+='['+title+' minLength],' 
+            }
+            else if(field?.maxLength!=null && (newVal??'').toString().length > field?.maxLength) {
+                var title=field?.title??propertyKey;
+                text+='['+title+' maxLength],'  
+            } 
         }
-        else if(field?.maxLength!=null && (newVal??'').toString().length > field?.maxLength) {
-            var title=field?.title??propertyKey;
-            text+='['+title+' maxLength],'  
-        } 
         return text;
 
     }
