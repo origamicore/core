@@ -5,7 +5,7 @@ import InternalService from "../models/internalService";
 export default class RouteService
 {
     services = new Map<String,InternalService>() ;
-    externalServices=new Map<String,ExtrnalService>();
+    externalServices=new Map<String,ExtrnalService|ExtrnalService[]>();
     setup(instance)
     {
         

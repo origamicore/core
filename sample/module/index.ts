@@ -1,5 +1,5 @@
  
-import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig, EventInput} from "../../"; 
+import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig, EventInput, HttpMethod} from "../../"; 
 import TestModel from "./models/testModel"; 
 
 @OriInjectable({domain:'test'})
@@ -61,6 +61,16 @@ class SampleIndex1
             counter++;
             event(counter)
         },1000)
+    }
+    @OriService({method:HttpMethod.Get,service:'profile'})
+    async getProfile()
+    {
+        
+    }
+    @OriService({method:HttpMethod.Post,service:'profile'})
+    async postProfile()
+    {
+        
     }
 }
 export {SampleIndex1}

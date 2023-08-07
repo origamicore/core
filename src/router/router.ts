@@ -41,7 +41,7 @@ export default class Router
     return Array.from(routes.get(domain).externalServices.keys() ) .map(p=>p+'')
 
   }
-  static getRouteData(domain:string , service:string): ExtrnalService
+  static getRouteData(domain:string , service:string): ExtrnalService|ExtrnalService[]
   {
     if(!routes.get(domain))return null;
     var route= routes.get(domain) ;
@@ -51,7 +51,26 @@ export default class Router
   static addExternalRoute(domain:string , service:string , data:ExtrnalService)
   {
     if(!routes.get(domain))routes.set(domain,new RouteService());
-    routes.get(domain).externalServices.set(service,data)  ; 
+    let srv=routes.get(domain).externalServices.get(service);
+    if(srv)
+    { 
+      if(Array.isArray(srv))
+      {
+        if(srv.filter(p=>p.method==HttpMethod.None || p.method==data.method)[0] || data.method==HttpMethod.None)
+          throw 'Duplicated Service : '+ domain+'/'+service
+        srv.push(data)
+      }
+      else
+      { 
+        if(srv.method==HttpMethod.None || srv.method==data.method || data.method==HttpMethod.None)
+          throw 'Duplicated Service : '+ domain+'/'+service
+        routes.get(domain).externalServices.set(service,[srv,data])
+      }
+    }
+    else
+    {
+      routes.get(domain).externalServices.set(service,data)  ;
+    } 
   }
   static addInternalRoute(domain:string , service:string , data:InternalService)
   {
@@ -68,10 +87,20 @@ export default class Router
       value.function=index[value.functionName]
       value.parent=index;
     }) 
-    service.externalServices.forEach((value: ExtrnalService) =>{
-       
-      value.function=index[value.functionName];
-      value.parent=index;
+    service.externalServices.forEach((value: ExtrnalService|ExtrnalService[]) =>{
+      if(Array.isArray(value))
+      {
+        value.forEach((srv: ExtrnalService, ) =>{
+
+          srv.function=index[srv.functionName];
+          srv.parent=index;  
+        })
+      }
+      else
+      {
+        value.function=index[value.functionName];
+        value.parent=index;        
+      }
     }) 
 
   }
@@ -180,22 +209,35 @@ export default class Router
       return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     }
     var d=routes.get(domain);
-    var s= d?.externalServices.get(service);
+    var existService=d?.externalServices.get(service);
+    var srv:ExtrnalService  ;
+    if(Array.isArray(existService))
+    {
+      srv=existService.filter(p=>p.method==httpMethod)[0];
+      if(!srv)
+      {
+        return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
+      }
+    }
+    else
+    {
+      srv=existService;
+    }
 
-    var routeData=s.validateRoute(route);
+    var routeData=srv.validateRoute(route);
     if(!routeData) return new RouteResponse({error: RouteErrorMessage.serviceNotExist}); 
     for(var param in routeData)
     {
       message.data[param]=routeData[param];
     }
-    var method=s.method??globalModel.config.defaultMethod;
+    var method=srv.method??globalModel.config.defaultMethod;
     if(method && method!=HttpMethod.None && method!=httpMethod)
     {
       return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     }
-    if(s==null) return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
+    if(srv==null) return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     var data:any[]=[];
-    for(var arg of s.args)
+    for(var arg of srv.args)
     {
       
       var dt:any=null; 
@@ -261,9 +303,9 @@ export default class Router
       data.push(dt);
 
     }
-    data.push(s.parent)
+    data.push(srv.parent)
     try{
-      var res =await  s.parent[s.functionName](...data) ;
+      var res =await  srv.parent[srv.functionName](...data) ;
       if(res instanceof RouteResponse)
       {
         return res;
