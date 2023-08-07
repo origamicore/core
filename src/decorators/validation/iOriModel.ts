@@ -46,8 +46,12 @@ export default class IOriModel
         }         
         var model=ModelService.getModel(this.constructor.name)
         for(let prop of model.props)
-        {
-            if(!prop.ignoreToJson)
+        { 
+            if(prop.readOnly)
+            {
+                copy[prop.name]=prop.readOnly(this);
+            }
+            else
             {
                 copy[prop.name]=this['@'+prop.name];
             }

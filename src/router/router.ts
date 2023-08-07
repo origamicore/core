@@ -28,6 +28,10 @@ var routes = globalModel.routes;
 export default class Router
 { 
   //static routes = new Map<String,RouteService>();  
+  static getModel(name:string)
+  {
+    return ModelService.getModel(name)
+  }
   static getDomains()
   {
     return Array.from(routes.keys() ).map(p=>p+'')
