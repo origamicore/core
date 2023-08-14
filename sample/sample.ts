@@ -52,7 +52,9 @@ export default class SampleProject
                 console.log('serviceData>>>',serviceData);
             } 
         } 
-
+        let getTest=await SampleRoute.RunGetTest();
+        console.log(getTest);
+        
     }
 }
 new SampleProject();

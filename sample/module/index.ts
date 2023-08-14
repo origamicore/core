@@ -1,5 +1,5 @@
  
-import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig, EventInput, HttpMethod} from "../../"; 
+import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig, EventInput, HttpMethod, OriGetService} from "../../"; 
 import TestModel from "./models/testModel"; 
 
 @OriInjectable({domain:'test'})
@@ -19,6 +19,12 @@ class SampleIndex implements PackageIndex
     }
     stop(): Promise<void> {
         return;
+    }
+
+    @OriGetService({isPublic:true})
+    async getSample()
+    {
+        return 'get test'
     }
 
     @OriService()

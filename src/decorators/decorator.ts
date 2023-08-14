@@ -62,7 +62,47 @@ export function DataInput(fields?: {
     }
 
 }
- 
+function addService(target: any, propertyKey: string, descriptor: PropertyDescriptor,fields:any)
+{
+    const paramTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey)
+    if(paramTypes)
+    {
+        var s = paramTypes.map(a => a) ;    
+        for(let index=0;index< s.length;index++)
+        { 
+            let paramTypeName=s[index].name;  
+            let basicType:any;
+            let manualType:any; 
+            if(paramTypeName=='Array'||paramTypeName=='Object')
+            {
+                //TODO
+            }
+            else if(paramTypeName=='Number' || paramTypeName=='Boolean'|| paramTypeName=='String'|| paramTypeName=='Date')
+            {
+                basicType=s[index];  
+            } 
+            else  
+            {
+                manualType=s[index]
+            }
+            
+            container.addParamData(propertyKey,new ParamModel({
+                index:index,
+                type:'input',
+                //isRequired:fields?.isRequired,
+                classType:manualType,
+                basicType
+            })) 
+        }
+
+    }
+    else
+    {
+        console.log('Service Type Warning');
+    }
+    container.setFunction(propertyKey,new FunctionOption(fields as any)); 
+
+}
 export function OriService(fields?: {
    // domain?: string,
     route?:string;
@@ -75,46 +115,45 @@ export function OriService(fields?: {
     isEvent?:boolean
   }) { 
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {  
- 
-        const paramTypes = Reflect.getMetadata('design:paramtypes', target, propertyKey)
-        if(paramTypes)
-        {
-            var s = paramTypes.map(a => a) ;    
-            for(let index=0;index< s.length;index++)
-            { 
-                let paramTypeName=s[index].name;  
-                let basicType:any;
-                let manualType:any; 
-                if(paramTypeName=='Array'||paramTypeName=='Object')
-                {
-                    //TODO
-                }
-                else if(paramTypeName=='Number' || paramTypeName=='Boolean'|| paramTypeName=='String'|| paramTypeName=='Date')
-                {
-                    basicType=s[index];  
-                } 
-                else  
-                {
-                    manualType=s[index]
-                }
-                
-                container.addParamData(propertyKey,new ParamModel({
-                    index:index,
-                    type:'input',
-                    //isRequired:fields?.isRequired,
-                    classType:manualType,
-                    basicType
-                })) 
-            }
-
-        }
-        else
-        {
-            console.log('Service Type Warning');
-        }
-        container.setFunction(propertyKey,new FunctionOption(fields as any));         
+         addService(target,propertyKey,descriptor,fields)
     };
 }
+export function OriGetService(fields?: {
+   // domain?: string,
+    route?:string;
+    service?: string, 
+    isInternal?:boolean,
+    isPublic?:boolean,
+    roles?: number[] 
+    maxUploadSize?:number
+    method?:HttpMethod,
+    isEvent?:boolean
+  }) { 
+    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {  
+        if(!fields)fields={};
+        fields['method']=HttpMethod.Get;
+         addService(target,propertyKey,descriptor,fields)
+    };
+}
+export function OriPostService(fields?: {
+   // domain?: string,
+    route?:string;
+    service?: string, 
+    isInternal?:boolean,
+    isPublic?:boolean,
+    roles?: number[] 
+    maxUploadSize?:number
+    method?:HttpMethod,
+    isEvent?:boolean
+  }) { 
+    return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {   
+        if(!fields)fields={};
+        fields['method']=HttpMethod.Post;
+         addService(target,propertyKey,descriptor,fields)
+    };
+}
+
+
 interface Type<T> {
     new (...args: any[]): T;
   }

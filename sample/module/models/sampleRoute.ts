@@ -17,6 +17,10 @@ export default class SampleRoute
            addedData
         }}))
     }
+    static async RunGetTest()
+    {
+       return await Router.runExternal(this.domain,'getSample',new MessageModel( ),'/test/getSample','GET')
+    }
     static async RunEventService(event:(data:RouteResponse)=>void)
     {
        return await Router.runInternal(this.domain,'eventService',new MessageModel({}),event)

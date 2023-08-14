@@ -10,7 +10,7 @@ import ModuleConfig from './src/models/moduleConfig';
 import PackageIndex from './src/models/packageIndex'; 
 import OrigamiCore from './src/origamiCore';
 import Router from './src/router/router';
-import OriInjectable, { DataInput, EventInput, OdataInput, OriModel, OriProps, OriService, SessionInput } from "./src/decorators/decorator";
+import OriInjectable, { DataInput, EventInput, OdataInput, OriGetService, OriModel, OriPostService, OriProps, OriService, SessionInput } from "./src/decorators/decorator";
 import IOriModel from './src/decorators/validation/iOriModel';
 import MessageModel from './src/models/messageModel';
 import ConfigModel from './src/models/configModel';
@@ -39,5 +39,7 @@ export {
 	OdataInput,
 	ExtrnalService,
 	HttpMethod,
-	EventInput
+	EventInput,
+	OriGetService,
+	OriPostService
 }
