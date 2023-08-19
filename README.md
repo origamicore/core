@@ -41,3 +41,5 @@ Instructions on how to use them in your own application are linked below.
 | MongoDb | [https://www.npmjs.com/package/@origamicore/mongo] | 
 | Redis | [https://www.npmjs.com/package/@origamicore/redis] |  
 | EOSIO Hyperion | [https://www.npmjs.com/package/@origamicore/hyperion] | 
+| Semaphore  | [https://github.com/origamicore/semaphore] | 
+| Google OAuth  | [https://github.com/origamicore/google-oauth] | 
