@@ -23,6 +23,6 @@ export default class SampleRoute
     }
     static async RunEventService(event:(data:RouteResponse)=>void)
     {
-       return await Router.runInternal(this.domain,'eventService',new MessageModel({}),event)
+       return await Router.runExternal(this.domain,'eventService',new MessageModel({}),'/test/eventService','GET',event)
     }
 }

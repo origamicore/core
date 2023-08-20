@@ -285,7 +285,13 @@ export default class Router
           }
           else
           {
-            if(arg.type) dt=new (arg.type)(dt); 
+            if(arg.type) 
+            {
+              if(arg.type.name!='Function')
+              {
+                dt=new (arg.type)(dt); 
+              }
+            }
             else dt=(arg.basicType)(dt); 
             if(dt instanceof IOriModel)
             { 

@@ -59,7 +59,7 @@ class SampleIndex1
         console.log('internalService1 >',this.name );
 
     }
-    @OriService({isInternal:true,isEvent:true})
+    @OriService({isEvent:true})
     async eventService(@EventInput event:(param:number)=>void)
     {
         let counter:number=0;
