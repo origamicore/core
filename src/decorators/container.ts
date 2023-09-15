@@ -3,7 +3,7 @@ import ModelService, { ObjectModel } from "./modelService";
 
 export class ParamModel{
     index:number;
-    type:'session'|'input'|'odata'|'event';
+    type:'session'|'input'|'odata'|'event'|'eventKey';
     isRequired:boolean;
     classType:any=null;
     basicType:any=null;
@@ -11,7 +11,7 @@ export class ParamModel{
     public constructor(
         fields?: { 
           index?: number
-          type?:'session'|'input'|'odata'|'event'
+          type?:'session'|'input'|'odata'|'event'|'eventKey'
           isRequired?: boolean
           classType?:any
           basicType?:any

@@ -26,7 +26,7 @@ var routes = globalModel.routes;
 
 
 export default class Router
-{ 
+{  
   //static routes = new Map<String,RouteService>();  
   static getModel(name:string)
   {
@@ -104,9 +104,9 @@ export default class Router
     }) 
 
   }
-  static async runInternal(domain:string ,service:string ,message:MessageModel,event?:(RouteResponse)=>void ):Promise<RouteResponse>
+  static async runInternal(domain:string ,service:string ,message:MessageModel,event?:(RouteResponse)=>void,eventKey?:any ):Promise<RouteResponse>
   { 
-    
+     
     if(domain==null || !routes.get(domain))
     {
       return new RouteResponse({error: RouteErrorMessage.domainNotExist});
@@ -140,7 +140,11 @@ export default class Router
             return event(RouteResponse.success(res)); 
         }
          
-      }   
+      } 
+      if(arg.isEventKey)
+      {
+        dt=eventKey;
+      }  
       if(arg.isRequired && !dt)
       { 
         return RouteResponse.failed(null,arg.name+' required','')
@@ -197,7 +201,7 @@ export default class Router
       return RouteResponse.failed(exp,exp.message,'')
     }
   }
-  static async runExternal(domain:string ,service:string ,message:MessageModel,route:string,httpMethod:string ,event?:(RouteResponse)=>void ):Promise<RouteResponse>
+  static async runExternal(domain:string ,service:string ,message:MessageModel,route:string,httpMethod:string ,event?:(RouteResponse)=>void,eventKey?:any  ):Promise<RouteResponse>
   { 
     
     if(domain==null || !routes.get(domain))
@@ -252,6 +256,10 @@ export default class Router
       if(arg.isOdata)
       {
         dt=new OdataModel(message.data) ;
+      }
+      if(arg.isEventKey)
+      {
+        dt=eventKey;
       }
       if(arg.isEvent)
       {

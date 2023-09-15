@@ -7,6 +7,8 @@ export default class ArgModel
     isOdata:boolean=false;
     isArray:boolean=false;
     isEvent:boolean=false;
+    isEventKey:boolean=false;
+
     isRequired:boolean;
     public constructor(
         fields?: { 

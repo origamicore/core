@@ -1,5 +1,5 @@
  
-import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig, EventInput, HttpMethod, OriGetService} from "../../"; 
+import {OriInjectable,PackageIndex,DataInput, OriService, SessionInput,ModuleConfig, EventInput, HttpMethod, OriGetService, EventKeyInput} from "../../"; 
 import TestModel from "./models/testModel"; 
 
 @OriInjectable({domain:'test'})
@@ -60,11 +60,13 @@ class SampleIndex1
 
     }
     @OriService({isEvent:true})
-    async eventService(@EventInput event:(param:number)=>void)
+    async eventService(@EventInput event:(param:number)=>void,@EventKeyInput key:string)
     {
         let counter:number=0;
         setInterval(()=>{
             counter++;
+            console.log('>>>',key);
+            
             event(counter)
         },1000)
     }

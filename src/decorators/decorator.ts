@@ -32,6 +32,12 @@ export  function EventInput (target: Object, propertyKey: string , parameterInde
         type:'event'
     })) 
 }
+export  function EventKeyInput (target: Object, propertyKey: string , parameterIndex: number) { 
+    container.addParamData(propertyKey,new ParamModel({
+        index:parameterIndex,
+        type:'eventKey'
+    })) 
+}
 export  function SessionInput (target: Object, propertyKey: string , parameterIndex: number) { 
     container.addParamData(propertyKey,new ParamModel({
         index:parameterIndex,
@@ -189,6 +195,7 @@ export default function OriInjectable(fields: {
                 if(pmodel.type=='session')paramList[pmodel.index].isSession=true;
                 if(pmodel.type=='odata')paramList[pmodel.index].isOdata=true;
                 if(pmodel.type=='event')paramList[pmodel.index].isEvent=true;
+                if(pmodel.type=='eventKey')paramList[pmodel.index].isEventKey=true;
                 if(pmodel.classType)paramList[pmodel.index].type= pmodel.classType ; 
                 if(pmodel.basicType)paramList[pmodel.index].basicType= pmodel.basicType ; 
                 if(pmodel.isArray)paramList[pmodel.index].isArray= pmodel.isArray ; 

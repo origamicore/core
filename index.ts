@@ -10,13 +10,15 @@ import ModuleConfig from './src/models/moduleConfig';
 import PackageIndex from './src/models/packageIndex'; 
 import OrigamiCore from './src/origamiCore';
 import Router from './src/router/router';
-import OriInjectable, { DataInput, EventInput, OdataInput, OriGetService, OriModel, OriPostService, OriProps, OriService, SessionInput } from "./src/decorators/decorator";
+import OriInjectable, { DataInput, EventInput, EventKeyInput, OdataInput, OriGetService, OriModel, OriPostService, OriProps, OriService, SessionInput } from "./src/decorators/decorator";
 import IOriModel from './src/decorators/validation/iOriModel';
 import MessageModel from './src/models/messageModel';
 import ConfigModel from './src/models/configModel';
 import RouteResponse, { AddedResponse, ResponseDataModel, ResponseErrorModel } from './src/models/routeResponse';
 import OdataModel from './src/router/odataModel';
 import ExtrnalService, { HttpMethod } from './src/models/extrnalService';
+import OriConfig, { OriConfigProps } from './src/decorators/config/ConfigDecorator';
+import { PropTypes } from './src/decorators/config/PropTypes';
 export default OrigamiCore
 export {
 	ModuleConfig,
@@ -41,5 +43,9 @@ export {
 	HttpMethod,
 	EventInput,
 	OriGetService,
-	OriPostService
+	OriPostService,
+	OriConfigProps,
+	OriConfig,
+	EventKeyInput,
+	PropTypes
 }
