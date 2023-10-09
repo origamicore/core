@@ -15,9 +15,11 @@ class SampleIndex implements PackageIndex
         return;
     }
     restart(): Promise<void> {
+        console.log('restart');        
         return;
     }
     stop(): Promise<void> {
+        console.log('stop');
         return;
     }
 

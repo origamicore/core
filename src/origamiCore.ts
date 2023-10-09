@@ -8,6 +8,7 @@ var globalModel:GlobalModels=global.origamicore as GlobalModels ;
 export default class OrigamiCore
 {
 	config:ConfigModel;
+	instances:PackageIndex[]=[]
 	constructor(config:ConfigModel)
 	{
 		this.config=config;
@@ -20,6 +21,35 @@ export default class OrigamiCore
 			var instance=await config.createInstance();
 			await instance.start();
 			Router.setInstance(instance);
+			this.instances.push(instance);
 		}  
+	}
+	async stop(index:number=-1)
+	{ 
+		if(index>-1)
+		{
+			this.instances[index].stop();
+		}
+		else
+		{
+			for(var instance of this.instances)
+			{ 
+				instance.stop();
+			}
+		}
+	}
+	async restart(index:number=-1)
+	{ 
+		if(index>-1)
+		{
+			this.instances[index].restart();
+		}
+		else
+		{
+			for(var instance of this.instances)
+			{ 
+				instance.restart();
+			}
+		}
 	}
 }

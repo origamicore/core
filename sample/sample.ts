@@ -54,7 +54,10 @@ export default class SampleProject
         } 
         let getTest=await SampleRoute.RunGetTest();
         console.log(getTest);
-        
+        setTimeout(async()=>{
+            await origamicore.restart()
+            await origamicore.stop()
+        },5000)   
     }
 }
 new SampleProject();
