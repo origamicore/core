@@ -98,8 +98,11 @@ export default class Router
       }
       else
       {
-        value.function=index[value.functionName];
-        value.parent=index;        
+        if(index[value.functionName])
+        {  
+          value.function=index[value.functionName];
+          value.parent=index;        
+       }
       }
     }) 
 
