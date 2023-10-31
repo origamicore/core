@@ -19,6 +19,7 @@ import OdataModel from './src/router/odataModel';
 import ExtrnalService, { HttpMethod } from './src/models/extrnalService';
 import OriConfig, { OriConfigProps } from './src/decorators/config/ConfigDecorator';
 import { PropTypes } from './src/decorators/config/PropTypes';
+import ModelService,{  ObjectModel } from './src/decorators/modelService';
 export default OrigamiCore
 export {
 	ModuleConfig,
@@ -47,5 +48,7 @@ export {
 	OriConfigProps,
 	OriConfig,
 	EventKeyInput,
-	PropTypes
+	PropTypes,
+	ObjectModel,
+	ModelService
 }

@@ -234,10 +234,10 @@ export default function OriInjectable(fields: {
 
 
 export function OriModel(fields?: {
-     
+     data?:any
   }) {
     return function <T>(target: Type<T>) {
-        ModelContainer.addModel(target.name);
+        ModelContainer.addModel(target.name,fields.data);
     };
   }
  
@@ -254,6 +254,7 @@ export function OriProps(fields?: {
     isRequired?:boolean
     isRequiredError?:string
     type?:string
+    data?:any
   })
 {
     return function(target: Object, propertyKey: string) { 

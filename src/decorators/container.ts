@@ -1,6 +1,8 @@
 import { HttpMethod } from "../models/extrnalService";
+import GlobalModels from "../models/globalModels";
 import ModelService, { ObjectModel } from "./modelService";
 
+var globalModel:GlobalModels=global.origamicore as GlobalModels ; 
 export class ParamModel{
     index:number;
     type:'session'|'input'|'odata'|'event'|'eventKey';
@@ -103,6 +105,7 @@ export class ModelProps
     ignoreToJson:boolean
     isRequired:boolean 
     type:string;
+    data?:any
     constructor(name:string,fields?: { 
         readOnly?: (p:any)=>any
         title?:string
@@ -112,6 +115,7 @@ export class ModelProps
         ignoreToJson?:boolean
         isRequired?:boolean 
         type?:string
+        data?:any
       })
     {
         this.name=name;
@@ -125,9 +129,9 @@ export class ModelContainer
     {
         this.props.push(props);
     }
-    static addModel(className:string)
+    static addModel(className:string,data?:any)
     {
-        ModelService.models.set(className,new ObjectModel({name:className,props:this.props}));  
+        globalModel.models.set(className,new ObjectModel({name:className,props:this.props,data}));  
         this.props=[]
     }
 }

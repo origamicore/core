@@ -1,14 +1,19 @@
 import ErrorModel from "../models/errorModel";
+import GlobalModels from "../models/globalModels";
 import { ModelProps } from "./container";
+
+var globalModel:GlobalModels=global.origamicore as GlobalModels ; 
 
 export class ObjectModel
 {
     name:string;
     props:ModelProps[]
+    data:any;
     public constructor(
         fields: {
             name:string;
             props:ModelProps[]
+            data?:any;
         }) {
         if (fields) Object.assign(this, fields);
     }
@@ -23,23 +28,22 @@ export class ObjectModel
         }
         return text;
     }
-}
+} 
 export default class ModelService
 {
-    static models:Map<string,ObjectModel>=new Map<string,ObjectModel>();
     static  getModel(name:string):ObjectModel
     {
-        return this.models.get(name)  as ObjectModel
+        return globalModel.models.get(name)  as ObjectModel
     }
     static getByTag(name:string,tag:string):string[]
     {
-        var model=this.models.get(name) as ObjectModel ; 
+        var model=globalModel.models.get(name) as ObjectModel ; 
         return model.props.filter(p=>(Array.isArray(p.tags))?p.tags.indexOf(tag)>-1 : p.tags==tag).map(p=>p.name);
     }
     static validateObject(name:string,value:any):string|true
     {
         var error:string=''; 
-        var model=this.models.get(name) as ObjectModel ;  
+        var model=globalModel.models.get(name) as ObjectModel ;  
         
         if(!model)return '';
         for(var prop of model.props)
@@ -58,7 +62,7 @@ export default class ModelService
     }
     static validate(name:string,propertyKey:string,newVal:any):string
     {
-        var model=this.models.get(name) ;
+        var model=globalModel.models.get(name) ;
         if(!model)return '';
         var field=model.props.filter(p=>p.name==propertyKey)[0];
         if(!field)return '';
