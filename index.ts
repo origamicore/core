@@ -1,10 +1,14 @@
  
-import GlobalModels from './src/models/globalModels';
+import GlobalModels from './src/models/globalModels'; 
 var globalModel:GlobalModels=new GlobalModels();
 if(global.origamicore)
 {
   globalModel=global.origamicore as GlobalModels ;
 }  
+else
+{
+  global.origamicore=globalModel
+}
 
 import ModuleConfig from './src/models/moduleConfig';
 import PackageIndex from './src/models/packageIndex'; 
@@ -20,6 +24,7 @@ import ExtrnalService, { HttpMethod } from './src/models/extrnalService';
 import OriConfig, { OriConfigProps } from './src/decorators/config/ConfigDecorator';
 import { PropTypes } from './src/decorators/config/PropTypes';
 import ModelService,{  ObjectModel } from './src/decorators/modelService';
+import OdataResponse from './src/models/common/odataResponse';
 export default OrigamiCore
 export {
 	ModuleConfig,
@@ -50,5 +55,7 @@ export {
 	EventKeyInput,
 	PropTypes,
 	ObjectModel,
-	ModelService
+	ModelService,
+	OdataResponse,
+	
 }

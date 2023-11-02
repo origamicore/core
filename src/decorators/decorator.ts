@@ -237,7 +237,7 @@ export function OriModel(fields?: {
      data?:any
   }) {
     return function <T>(target: Type<T>) {
-        ModelContainer.addModel(target.name,fields.data);
+        ModelContainer.addModel(target.name,fields?.data);
     };
   }
  
