@@ -25,6 +25,8 @@ import OriConfig, { OriConfigProps } from './src/decorators/config/ConfigDecorat
 import { PropTypes } from './src/decorators/config/PropTypes';
 import ModelService,{  ObjectModel } from './src/decorators/modelService';
 import OdataResponse from './src/models/common/odataResponse';
+import SelectModel from './src/models/database/selectModel';
+import SortModel from './src/models/database/sortModel';
 export default OrigamiCore
 export {
 	ModuleConfig,
@@ -57,5 +59,7 @@ export {
 	ObjectModel,
 	ModelService,
 	OdataResponse,
+	SelectModel,
+	SortModel
 	
 }
