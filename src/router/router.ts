@@ -204,7 +204,7 @@ export default class Router
       return RouteResponse.failed(exp,exp.message,'')
     }
   }
-  static async runExternal(domain:string ,service:string ,message:MessageModel,route:string,httpMethod:string ,event?:(RouteResponse)=>void,eventKey?:any  ):Promise<RouteResponse>
+  static async runExternal(domain:string ,service:string ,message:MessageModel,route:string,httpMethod:string ,event?:(data:RouteResponse,reject?:boolean)=>void,eventKey?:any  ):Promise<RouteResponse>
   { 
     
     if(domain==null || !routes.get(domain))
@@ -266,12 +266,12 @@ export default class Router
       }
       if(arg.isEvent)
       {
-        dt=(res:any)=>{
+        dt=(res:any,reject?:boolean)=>{
             if(res instanceof RouteResponse)
             {
-              return event(res) ;
+              return event(res,reject) ;
             }
-            return event(RouteResponse.success(res)); 
+            return event(RouteResponse.success(res),reject); 
         }
       }
       if(arg.isRequired && !dt)
