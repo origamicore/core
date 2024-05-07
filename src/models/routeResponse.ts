@@ -33,6 +33,7 @@ export class AddedResponse
   streamFileDownload:string;
   directFileDownload:string;
   type:string;
+  stream:boolean
   public constructor(
       fields?: {  
         redirect?: string
@@ -40,6 +41,7 @@ export class AddedResponse
         streamFileDownload?: string
         directFileDownload?: string
         type?: string
+        stream:boolean
       }) {
       if (fields) Object.assign(this, fields);
   }
