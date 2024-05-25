@@ -27,6 +27,7 @@ import ModelService,{  ObjectModel } from './src/decorators/modelService';
 import OdataResponse from './src/models/common/odataResponse';
 import SelectModel from './src/models/database/selectModel';
 import SortModel from './src/models/database/sortModel';
+import CloudConfig, { CloudType } from './src/models/cloudConfig';
 export default OrigamiCore
 export {
 	ModuleConfig,
@@ -60,6 +61,8 @@ export {
 	ModelService,
 	OdataResponse,
 	SelectModel,
-	SortModel
+	SortModel,
+	CloudConfig,
+	CloudType
 	
 }
