@@ -9,7 +9,7 @@ import RouteResponse from "../models/routeResponse";
 import UploadModel from "../models/uploadModel";
 import OdataModel from "./odataModel";
 import RouteErrorMessage from "./routeErrorMessage"; 
-import RouteService from "./routeService";
+import RouteService, { RouteType } from "./routeService";
 import UploadService from "./uploadService";
  
 var globalModel:GlobalModels=new GlobalModels();
@@ -77,6 +77,21 @@ export default class Router
     if(!routes.get(domain))routes.set(domain,new RouteService());
     routes.get(domain).services.set(service,data) ;
   }
+  static async setMQSender(mqAddress:string,index:PackageIndex)
+  {
+    var domain=index.name;
+    if(!routes.get(domain))return null;
+    var service=routes.get(domain); 
+    await service.setupMQSender(mqAddress,index);
+
+  }
+  static async setMQReciver(mqAddress:string,index:PackageIndex)
+  {
+    var domain=index.name;
+    if(!routes.get(domain))return null;
+    var service=routes.get(domain); 
+    await service.setupMQReciver(mqAddress,index);
+  }
   static setInstance(index:PackageIndex)
   {
     var domain=index.name;
@@ -119,6 +134,10 @@ export default class Router
       return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     }
     var d=routes.get(domain);
+    if(d.type==RouteType.MQSender)
+    {
+      return await d.sendMessage(true,domain,service,message)
+    }
     var s= d?.services.get(service) ;
     if(s==null) return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     var data:any[]=[];
@@ -216,6 +235,12 @@ export default class Router
       return new RouteResponse({error: RouteErrorMessage.serviceNotExist});
     }
     var d=routes.get(domain);
+    
+    if(d.type==RouteType.MQSender)
+    {
+      return await d.sendMessage(false,domain,service,message,route,method)
+    }
+
     var existService=d?.externalServices.get(service);
     var srv:ExtrnalService  ;
     if(Array.isArray(existService))

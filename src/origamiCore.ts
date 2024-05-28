@@ -1,4 +1,5 @@
 
+import { CloudType } from "./models/cloudConfig";
 import ConfigModel from "./models/configModel";
 import GlobalModels from "./models/globalModels";
 import ModuleConfig from "./models/moduleConfig";
@@ -14,15 +15,53 @@ export default class OrigamiCore
 		this.config=config;
 		globalModel.config=config;
 	}
-	async start()
+	async start(indexes:number[]=[],mqAddress:string='')
 	{ 
-		for(var config of this.config.packageConfig)
+		if(mqAddress)
 		{
-			var instance=await config.createInstance();
-			await instance.start();
-			Router.setInstance(instance);
-			this.instances.push(instance);
-		}  
+			for(let i=0;i<this.config.packageConfig.length;i++)
+			{
+				let config=this.config.packageConfig[i];
+				if(config.cloud)
+				{
+					if(indexes.indexOf(i)>-1)
+					{
+						var instance=await config.createInstance();
+						await instance.start();
+						Router.setMQReciver(mqAddress,instance);
+						Router.setInstance(instance);
+						this.instances.push(instance); 
+					}
+					else
+					{
+						
+						if(config.cloud.type==CloudType.None)
+						{
+							continue
+						}
+						var instance=await config.createInstance();
+						Router.setMQSender(mqAddress,instance);					
+					}
+				}
+				else
+				{
+					var instance=await config.createInstance();
+					await instance.start();
+					Router.setInstance(instance);
+					this.instances.push(instance);
+				}
+			}
+		}
+		else
+		{
+			for(var config of this.config.packageConfig)
+			{
+				var instance=await config.createInstance();
+				await instance.start();
+				Router.setInstance(instance);
+				this.instances.push(instance);
+			}  
+		}
 	}
 	async stop(index:number=-1)
 	{ 

@@ -2,7 +2,8 @@ export enum CloudType
 {
     UniqueInCloud=1,
     UniqueInServer=2,
-    MultiProcess=3
+    MultiProcess=3,
+    None=4
 }
 export default class CloudConfig
 {
