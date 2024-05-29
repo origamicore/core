@@ -28,7 +28,7 @@ export default class OrigamiCore
 					{
 						var instance=await config.createInstance();
 						await instance.start();
-						Router.setMQReciver(mqAddress,instance);
+						Router.setMQReciver(mqAddress,instance,config.cloud.maxProcess);
 						Router.setInstance(instance);
 						this.instances.push(instance); 
 					}

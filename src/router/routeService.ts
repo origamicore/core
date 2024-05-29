@@ -18,10 +18,10 @@ export default class RouteService
     externalServices=new Map<String,ExtrnalService|ExtrnalService[]>();
     type:RouteType=RouteType.None;
     sender:RabbitMQSender;
-    async setupMQReciver(mqAddress:string,instance:PackageIndex)
+    async setupMQReciver(mqAddress:string,instance:PackageIndex,maxProcess:number)
     {
         this.type=RouteType.MQReciver;
-        let mq= new RabbitMQReciver(mqAddress,instance.name);
+        let mq= new RabbitMQReciver(mqAddress,instance.name,maxProcess);
         await mq.connect()
     }
     async setupMQSender(mqAddress:string,instance:PackageIndex)

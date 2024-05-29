@@ -85,12 +85,12 @@ export default class Router
     await service.setupMQSender(mqAddress,index);
 
   }
-  static async setMQReciver(mqAddress:string,index:PackageIndex)
+  static async setMQReciver(mqAddress:string,index:PackageIndex,maxProcess:number)
   {
     var domain=index.name;
     if(!routes.get(domain))return null;
     var service=routes.get(domain); 
-    await service.setupMQReciver(mqAddress,index);
+    await service.setupMQReciver(mqAddress,index,maxProcess);
   }
   static setInstance(index:PackageIndex)
   {

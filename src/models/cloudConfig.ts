@@ -7,11 +7,13 @@ export enum CloudType
 }
 export default class CloudConfig
 {
+    maxProcess:number=1000;
     group:string;
     type:CloudType=CloudType.MultiProcess;
     constructor(data:{
         group:string;
         type?:CloudType; 
+        maxProcess?:number;
     })
     {
         Object.assign(this,data);

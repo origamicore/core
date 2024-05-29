@@ -5,10 +5,12 @@ export default class RabbitMQReciver
 {
     address:string;
     queueName:string;
-    constructor(address:string,queueName:string)
+    maxProcess:number
+    constructor(address:string,queueName:string,maxProcess:number)
     {
         this.address=address;
         this.queueName=queueName;
+        this.maxProcess=maxProcess;
     }
     async connect( )
     { 
@@ -22,7 +24,7 @@ export default class RabbitMQReciver
                 } 
 
                 channel.assertQueue(this.queueName, { durable: false });
-                channel.prefetch(1); 
+                channel.prefetch(this.maxProcess); 
                 channel.consume(this.queueName,  async(msg)=> {
                     let resp:any={};
                     let data=JSON.parse(msg.content.toString())
